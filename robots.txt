@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://servizi-gratis.github.io/calcolatore-mutuo-online/sitemap.xml
