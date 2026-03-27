@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calcolatore Mutuo Online | Rata, Interessi e Totale Pagato</title>
+  <meta name="description" content="Calcola rapidamente la rata mensile del mutuo con ammortamento alla francese. Inserisci importo, tasso e durata per vedere rata, interessi totali e totale pagato." />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="OpenAI" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="it_IT" />
+  <meta property="og:title" content="Calcolatore Mutuo Online" />
+  <meta property="og:description" content="Scopri subito la rata mensile, gli interessi totali e il costo complessivo del tuo mutuo." />
+  <meta property="og:site_name" content="Calcolatore Mutuo" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Calcolatore Mutuo Online" />
+  <meta name="twitter:description" content="Calcola rata, interessi e totale pagato del mutuo in pochi secondi." />
+  <link rel="canonical" href="https://servizi-gratis.github.io/calcolatore-mutuo-online/" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Calcolatore Mutuo Online",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "inLanguage": "it-IT",
+      "description": "Strumento online per calcolare la rata del mutuo con ammortamento alla francese.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="hero__content">
+        <span class="eyebrow">Calcolo rapido del mutuo</span>
+        <h1>Calcola la rata del mutuo in pochi secondi</h1>
+        <p class="hero__text">
+          Inserisci importo, tasso e durata per ottenere una stima immediata della rata mensile,
+          degli interessi complessivi e del totale da rimborsare.
+        </p>
+        <ul class="hero__highlights" aria-label="Vantaggi del calcolatore mutuo">
+          <li>Ammortamento alla francese</li>
+          <li>Risultati chiari e immediati</li>
+          <li>Ottimizzato per desktop e mobile</li>
+        </ul>
+      </div>
+      <div class="hero__badge-card" aria-hidden="true">
+        <div class="badge-card__label">Stima veloce</div>
+        <div class="badge-card__value" id="heroRate">€ 0</div>
+        <div class="badge-card__caption">Rata mensile indicativa</div>
+      </div>
+    </header>
+
+    <main>
+      <section class="calculator-section" aria-labelledby="calculator-title">
+        <div class="card calculator-card">
+          <div class="section-heading">
+            <span class="section-tag">Simulatore</span>
+            <h2 id="calculator-title">Inserisci i dati del mutuo</h2>
+            <p>
+              Il calcolo utilizza il metodo standard di ammortamento alla francese. Nel caso di tasso variabile,
+              il risultato rappresenta una stima basata sul tasso attuale inserito.
+            </p>
+          </div>
+
+          <form id="mortgageForm" class="calculator-form" novalidate>
+            <div class="form-grid">
+              <label class="field">
+                <span>Importo del mutuo (€)</span>
+                <div class="input-wrap">
+                  <span class="input-prefix">€</span>
+                  <input type="number" id="loanAmount" min="1000" step="1000" value="150000" inputmode="decimal" required />
+                </div>
+              </label>
+
+              <label class="field">
+                <span>Tipo di tasso</span>
+                <select id="rateType">
+                  <option value="fixed">Fisso</option>
+                  <option value="variable">Variabile (stima)</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Tasso di interesse annuo (%)</span>
+                <div class="input-wrap">
+                  <input type="number" id="interestRate" min="0" step="0.01" value="3.50" inputmode="decimal" required />
+                  <span class="input-suffix">%</span>
+                </div>
+              </label>
+
+              <label class="field field--full">
+                <span>Durata del mutuo (anni)</span>
+                <div class="duration-controls">
+                  <input type="range" id="loanYearsRange" min="5" max="40" step="1" value="25" aria-label="Seleziona la durata del mutuo in anni" />
+                  <div class="duration-number-wrap">
+                    <input type="number" id="loanYears" min="5" max="40" step="1" value="25" inputmode="numeric" required />
+                    <span>anni</span>
+                  </div>
+                </div>
+                <div class="range-labels" aria-hidden="true">
+                  <span>5</span>
+                  <span>40</span>
+                </div>
+              </label>
+            </div>
+
+            <div class="actions">
+              <button type="submit" class="btn btn--primary">Calcola mutuo</button>
+              <button type="button" class="btn btn--ghost" id="resetBtn">Reset</button>
+            </div>
+
+            <p class="helper-text" id="rateContext">
+              Hai selezionato un tasso fisso: la formula restituisce una rata costante per tutta la durata del mutuo.
+            </p>
+            <p class="error-message" id="errorMessage" role="alert" aria-live="polite"></p>
+          </form>
+        </div>
+
+        <aside class="results-panel">
+          <div class="card results-card">
+            <div class="section-heading section-heading--compact">
+              <span class="section-tag">Risultati</span>
+              <h2>Riepilogo del mutuo</h2>
+            </div>
+
+            <div class="result-highlight">
+              <span class="result-highlight__label">Rata mensile</span>
+              <strong class="result-highlight__value" id="monthlyPayment">€ 0</strong>
+            </div>
+
+            <div class="result-grid">
+              <div class="result-box">
+                <span class="result-box__label">Totale interessi</span>
+                <strong id="totalInterest">€ 0</strong>
+              </div>
+              <div class="result-box">
+                <span class="result-box__label">Totale pagato</span>
+                <strong id="totalPaid">€ 0</strong>
+              </div>
+            </div>
+
+            <div class="summary" id="summaryBox">
+              <h3>Riepilogo chiaro</h3>
+              <p id="summaryText">
+                Inserisci i dati per vedere una stima completa del tuo mutuo.
+              </p>
+            </div>
+          </div>
+
+          <div class="card note-card">
+            <h3>Nota importante</h3>
+            <p>
+              Questo strumento fornisce una simulazione indicativa. Non include eventuali costi accessori come
+              spese notarili, istruttoria, perizia, polizze o imposte.
+            </p>
+          </div>
+        </aside>
+      </section>
+
+      <section class="content-section" aria-labelledby="how-it-works-title">
+        <div class="card content-card">
+          <h2 id="how-it-works-title">Come funziona il calcolo del mutuo</h2>
+          <p>
+            La rata mensile viene calcolata con la formula dell'ammortamento alla francese, il metodo più comune per i mutui.
+            La quota interessi è più alta all'inizio del piano di rimborso, mentre la quota capitale cresce nel tempo.
+          </p>
+          <div class="formula-box">
+            <code>R = P × i / (1 - (1 + i)^(-n))</code>
+            <p>
+              Dove <strong>R</strong> è la rata mensile, <strong>P</strong> è il capitale finanziato,
+              <strong>i</strong> è il tasso mensile e <strong>n</strong> è il numero totale di rate.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="faq-section" aria-labelledby="faq-title">
+        <div class="section-heading section-heading--center">
+          <span class="section-tag">FAQ</span>
+          <h2 id="faq-title">Domande frequenti sul mutuo</h2>
+        </div>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>Che differenza c'è tra tasso fisso e tasso variabile?</summary>
+            <p>
+              Con il tasso fisso la rata resta costante. Con il tasso variabile può cambiare nel tempo in base all'andamento dei parametri di riferimento.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>Il calcolatore considera TAN o TAEG?</summary>
+            <p>
+              Questo simulatore lavora sul tasso di interesse annuo inserito e restituisce una stima della rata. Per confronti completi tra offerte,
+              conviene considerare anche il TAEG e tutti i costi accessori.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>Posso usare questo strumento per un mutuo a tasso variabile?</summary>
+            <p>
+              Sì, ma il risultato va letto come simulazione indicativa basata sul tasso che inserisci oggi. Se il tasso cambia, cambierà anche la rata futura.
+            </p>
+          </details>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© <span id="currentYear"></span> Calcolatore Mutuo. Simulazione informativa a scopo orientativo.</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
